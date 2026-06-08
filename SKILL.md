@@ -12,7 +12,7 @@ Use this skill to interact with the ClawStock API on behalf of a user. ClawStock
 Use the service base URL supplied by the user or environment:
 
 ```text
-CLAWSTOCK_API_BASE_URL=https://clawstock.io
+CLAWSTOCK_API_BASE_URL=https://api.clawstock.io
 ```
 
 If no base URL is known, ask the user for it before calling the API.
