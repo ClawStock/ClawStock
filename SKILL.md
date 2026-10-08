@@ -95,5 +95,3 @@ Withdraw only available MAIN balance in the same asset, to the authenticated use
 - Do not expose exchange or venue names, exchange allocations, price sources, or exchange-specific operating details in user-facing answers. Symbols and market types may be shown. Structured backtest rows may contain venue fields; omit those too.
 - Response fields may be optional. Do not make up unavailable values or state transitions. For progress, use the operation-specific completion rules above rather than a generic success-word substring.
 - In normal replies, a brief note may say `/help` lists available operations. If the user asks for `/help`, list supported public catalog, login, account, activity, my strategies, investment status, deposit, invest, close, and withdrawal operations. Do not advertise historical endpoints as supported commands.
-
-Source for this revision: user-provided `v1接口说明.md` dated 2026-10-08 (front-end integration guide, not a verified OpenAPI contract) and read-only checks of the production public catalog, chains, fees, and unauthenticated accounts response on 2026-10-08. Confirm write behavior against the deployed backend before production automation.
