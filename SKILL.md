@@ -59,7 +59,7 @@ Only act on the user's explicit request with concrete parameters. Before a fund-
 
 ### Deposit
 
-When the user asks to deposit or recharge, **start the deposit workflow**. Do not merely send them to the ClawStock homepage. First call the public `GET /api/v1/chains` and `GET /api/v1/fees`; intersect chains with `deposits_enabled=true`, an asset token address and decimals, and an enabled fee entry for that chain/asset. Show available options and the current minimum and fee. Ask for missing amount, asset, or chain only after this lookup. The current website uses USDT; do not assume an old USDC or Arbitrum-only rule still applies.
+When the user asks to deposit or recharge, **start the deposit workflow**. Do not merely send them to the ClawStock homepage. First call the public `GET /api/v1/chains` and `GET /api/v1/fees`; intersect chains with `deposits_enabled=true`, an asset token address and decimals, and an enabled fee entry for that chain/asset. Show every eligible chain with its current minimum and fee. If more than one chain is eligible and the user has not selected one, ask them to choose; do not silently pick the first response item or infer a default from examples. Ask for any other missing amount or asset after this lookup. The current website uses USDT, but supported assets must still come from the live responses.
 
 There is no deposit-creation HTTP request in the current website flow. The wallet must make an on-chain Pool transaction before the backend can register it. Once amount, asset, and chain are known, check the amount against the current minimum and give the user a **specific deposit page link**, not a generic website link:
 
@@ -74,10 +74,10 @@ If the deposit was made outside that page, or the page did not successfully subm
 Register an unsubmitted successful Pool transaction with authenticated `POST /api/v1/deposits`:
 
 ```json
-{"tx_hash":"0x...","amount":"100.00","asset":"USDT","chain":"arbitrum"}
+{"tx_hash":"0x...","amount":"<confirmed_decimal_amount>","asset":"<selected_asset>","chain":"<selected_chain>"}
 ```
 
-Then call `POST /api/v1/deposits/verify` with `{"tx_hash":"0x...","chain":"arbitrum"}` and poll `GET /api/v1/deposits/{deposit_id}`. The `chain` field is required in the current client; substitute the actual selected chain in both requests. If the website already submitted the hash, do not submit a duplicate registration; use its `deposit_id` or authenticated activity/account reads to check status. If the website leaves submission pending or failed, ask the user for the Pool deposit hash if it is not available to the Agent, then register or verify it. With a `deposit_id`, check the record and refresh `GET /api/v1/accounts` to confirm MAIN credit. Without a transaction hash or deposit ID, use authenticated account/activity reads to check whether credit appears; do not claim verification from the page alone. A submitted hash or registration response is not evidence that MAIN has been credited. The old `POST /api/v1/deposit/sessions` flow is not part of the current website integration; do not use it by default.
+Then call `POST /api/v1/deposits/verify` with `{"tx_hash":"0x...","chain":"<selected_chain>"}` and poll `GET /api/v1/deposits/{deposit_id}`. The `chain` field is required in the current client; use the same user-selected chain in both requests. If the website already submitted the hash, do not submit a duplicate registration; use its `deposit_id` or authenticated activity/account reads to check status. If the website leaves submission pending or failed, ask the user for the Pool deposit hash if it is not available to the Agent, then register or verify it. With a `deposit_id`, check the record and refresh `GET /api/v1/accounts` to confirm MAIN credit. Without a transaction hash or deposit ID, use authenticated account/activity reads to check whether credit appears; do not claim verification from the page alone. A submitted hash or registration response is not evidence that MAIN has been credited. The old `POST /api/v1/deposit/sessions` flow is not part of the current website integration; do not use it by default.
 
 ### Invest
 
