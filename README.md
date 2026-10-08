@@ -32,13 +32,7 @@ This Skill is suitable for scenarios where an AI Agent needs to operate the Claw
 
 1. Place the `skill/` directory into an Agent environment that supports custom Skills.
 2. Ensure that the Agent can read `skill/SKILL.md`.
-3. Configure the ClawStock API base URL for the Agent:
-
-```text
-CLAWSTOCK_API_BASE_URL=https://your-clawstock-api.example.com
-```
-
-4. Start a ClawStock-related request in the Agent session, for example:
+3. Start a ClawStock-related request in the Agent session, for example:
 
 ```text
 Help me log in to ClawStock and check my MAIN balance.
